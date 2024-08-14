@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package wallet;
+
+message BalanceRequest {
+    string wallet_id = 1;
+}
+
+message BalanceResponse {
+    int32 balance = 1;
+}
+
+message PaymentOrderRequest {
+    string wallet_id = 1;
+    int32 amount = 2;
+}
+
+message PaymentOrderResponse {
+    int32 order_id = 1;
+}
+
+message TransferRequest {
+    int32 order_id = 1;
+    int32 amount = 2;
+    string wallet_id = 3;
+}
+
+message TransferResponse {
+    int32 status = 1;
+}
+
+message ShutdownRequest {
+    string message = 1;
+}
+
+message ShutdownResponse {
+    int32 pending_orders = 1;
+    repeated Wallet wallet_statuses = 2;
+}
+
+message Wallet {
+    string wallet_id = 1;
+    int32 balance = 2;
+}
+
+service WalletService {
+    rpc GetBalance(BalanceRequest) returns (BalanceResponse);
+    rpc CreatePaymentOrder(PaymentOrderRequest) returns (PaymentOrderResponse);
+    rpc Transfer(TransferRequest) returns (TransferResponse);
+    rpc Shutdown(ShutdownRequest) returns (ShutdownResponse);
+}
