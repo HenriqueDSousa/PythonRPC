@@ -76,7 +76,6 @@ def serve():
     store_pb2_grpc.add_StoreServiceServicer_to_server(store_service, server)
     server.add_insecure_port(f'[::]:{port}')
     server.start()
-    print(f"Store server running on port {port}")
     stop_event.wait()
     server.stop(grace=1)
 

@@ -63,8 +63,12 @@ class WalletService(wallet_pb2_grpc.WalletServiceServicer):
         pending_orders = len(self.orders)
         wallet_statuses = [wallet_pb2.Wallet(wallet_id=k, balance=v) for k, v in self.wallets.items()]
 
-        self._stop_event.set()
         
+        keys = self.wallets.keys()
+        for key in keys:
+            print(f'{key} {self.wallets[key]}')
+        
+        self._stop_event.set()
         return wallet_pb2.ShutdownResponse(pending_orders=pending_orders, wallet_statuses=wallet_statuses)
 
 def serve():
@@ -73,15 +77,11 @@ def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     wallet_service = WalletService(server, stop_event)
     wallet_service.load_wallets()
-    print("Wallets: ", wallet_service.wallets)
     wallet_pb2_grpc.add_WalletServiceServicer_to_server(wallet_service, server)
     server.add_insecure_port(f'[::]:{port}')
     server.start()
-    print(f"Server running on port {port}")
     stop_event.wait()
-    server.stop(grace=1)
-    
-    
+    server.stop(grace=1)   
 
 if __name__ == '__main__':
     serve()

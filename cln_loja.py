@@ -29,8 +29,8 @@ def run():
         if order_id > 0:
             # Perform the sale
             sell_response = store_stub.Sell(store_pb2.SellRequest(order_id=order_id))
-            # print(order_response.order_id)
-            # print(sell_response.status)
+            print(order_response.order_id)
+            print(sell_response.status)
         else:
             print(order_response.order_id)
 

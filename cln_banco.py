@@ -26,8 +26,6 @@ def run():
         elif line.startswith('F'):
             response = stub.Shutdown(wallet_pb2.ShutdownRequest())
             
-            for wallet in response.wallet_statuses:
-                print(f'{wallet.wallet_id} {wallet.balance}')
             print(response.pending_orders)
             
             break
